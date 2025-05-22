@@ -1,0 +1,23 @@
+.user-button {
+    background-color: transparent;
+    border: none;
+    height: 100%;
+    width: 48px;
+    border-radius: 0;
+    transition: background-color 0.2s ease-in-out;
+  
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+  
+  .menu-button {
+    height: 100%;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+  

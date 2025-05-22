@@ -1,1 +1,20 @@
-/* You can add global styles to this file, and also import other style files */
+
+  app-root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  main {
+    flex: 1 0 auto; 
+  }
+
+  body {
+    background-color: #111111;
+    color: #e0e0e0; /* texto claro para buen contraste */
+    min-height: 100vh;
+  }
+  
+  
+ 
+  
