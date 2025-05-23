@@ -1,1 +1,11 @@
-<p>catalog works!</p>
+<div *ngIf="cargando">Cargando productos...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
+
+<div *ngIf="!cargando && !error" class="catalog-grid">
+  <div *ngFor="let producto of productos" class="producto-card">
+    <img [src]="producto.imagen" alt="{{ producto.nombre }}" class="producto-img" />
+    <h3>{{ producto.nombre }}</h3>
+    <p>Categoría: {{ producto.categoria }}</p>
+    <p>Stock: {{ producto.stock }}</p>
+  </div>
+</div>
