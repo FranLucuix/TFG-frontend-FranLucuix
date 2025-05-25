@@ -83,8 +83,15 @@
           </ng-container>
 
           <ng-template #noSelection>
-            <p class="text-muted text-center m-0">Haz clic en una tienda del mapa para ver más información.</p>
+            <div class="d-flex flex-column justify-content-center align-items-center h-100 text-center">
+              <p class="m-0">Haz clic en una tienda del mapa para ver más información.</p>
+              <div class="mt-3">
+                <img src="assets/img/leaflet/marker-icon.png" alt="Icono de marcador" class="img-fluid"
+                  style="max-width: 64px; height: auto;" />
+              </div>
+            </div>
           </ng-template>
+
         </div>
       </div>
     </div>

@@ -1,0 +1,68 @@
+<div class="container py-5 text-white">
+  <h2 class="text-center mb-4">Productos: {{ categoriaSeleccionada }}</h2>
+
+  <div *ngIf="cargando" class="text-center">
+    <p>Cargando productos...</p>
+  </div>
+
+  <div *ngIf="error" class="text-danger text-center">
+    <p>{{ error }}</p>
+  </div>
+
+  <div class="row g-4 justify-content-center" *ngIf="!cargando && productosFiltrados.length">
+    <div class="col-12 col-sm-6 col-md-4" *ngFor="let producto of productosFiltrados">
+      <div 
+        class="card h-100 bg-dark text-white border-0 shadow-sm" 
+        style="transition: transform 0.3s ease; cursor: pointer;"
+        (click)="productoSeleccionado = producto" 
+        data-bs-toggle="modal" data-bs-target="#productoModal"
+        onmouseover="this.style.transform='scale(1.1)'" 
+        onmouseout="this.style.transform='scale(1)'"
+      >
+        <img 
+          [src]="baseUrl + producto.imagenUrl" 
+          [alt]="producto.nombre" 
+          class="card-img-top img-fluid" 
+          style="height: 200px; object-fit: cover;"
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{ producto.nombre }}</h5>
+          <p class="card-text mb-1">Stock: {{ producto.stock }}</p>
+          <p class="card-text">
+            <ng-container *ngIf="producto.precioRebajado > 0 && producto.precioRebajado < producto.precio; else sinRebaja">
+              <span class="text-muted text-decoration-line-through me-2">{{ producto.precio | currency }}</span>
+              <span class="text-success fw-bold">{{ producto.precioRebajado | currency }}</span>
+            </ng-container>
+            <ng-template #sinRebaja>
+              <span class="text-white fw-bold">{{ producto.precio | currency }}</span>
+            </ng-template>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!cargando && !productosFiltrados.length" class="text-center mt-4">
+    <p class="text-muted">No hay productos en esta categoría.</p>
+  </div>
+
+  <!-- Modal para seleccionar cantidad -->
+  <div class="modal fade" id="productoModal" tabindex="-1" aria-labelledby="productoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-white">
+        <div class="modal-header border-0">
+          <h5 class="modal-title" id="productoModalLabel">{{ productoSeleccionado?.nombre }}</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <p>Seleccione la cantidad:</p>
+          <input type="number" class="form-control" [(ngModel)]="cantidadSeleccionada" min="1" [max]="productoSeleccionado?.stock || 1" />
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" (click)="confirmarCantidad()">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

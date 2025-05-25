@@ -7,10 +7,16 @@
             type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="bi bi-person-fill fs-5 text-white"></i>
         </button>
+        <!-- Reemplaza el <ul class="dropdown-menu"> actual con esto -->
         <ul class="dropdown-menu" aria-labelledby="userMenuButton">
             <li><a class="dropdown-item" href="#">Iniciar sesión</a></li>
             <li><a class="dropdown-item" href="#">Registrarse</a></li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" routerLink="/admin">Panel de administración</a></li>
         </ul>
+
     </div>
 
 

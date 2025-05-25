@@ -1,11 +1,26 @@
-<div *ngIf="cargando">Cargando productos...</div>
-<div *ngIf="error" class="error">{{ error }}</div>
-
-<div *ngIf="!cargando && !error" class="catalog-grid">
-  <div *ngFor="let producto of productos" class="producto-card">
-    <img [src]="producto.imagen" alt="{{ producto.nombre }}" class="producto-img" />
-    <h3>{{ producto.nombre }}</h3>
-    <p>Categoría: {{ producto.categoria }}</p>
-    <p>Stock: {{ producto.stock }}</p>
+<div class="container py-5">
+  <div class="row g-4 justify-content-center">
+    <div 
+      class="col-12 col-sm-6 col-md-4 text-center" 
+      *ngFor="let categoria of categorias"
+    >
+      <div 
+        class="card h-100 bg-dark text-white border-0 shadow-sm"
+        (click)="verCategoria(categoria.nombre)"
+        style="transition: transform 0.3s ease; cursor: pointer;"
+        onmouseover="this.style.transform='scale(1.10)'" 
+        onmouseout="this.style.transform='scale(1)'"
+      >
+        <img 
+          [src]="categoria.imagen" 
+          [alt]="categoria.nombre" 
+          class="card-img-top img-fluid rounded-top" 
+          style="height: 160px; object-fit: cover;"
+        />
+        <div class="card-body p-2">
+          <p class="card-text fw-semibold small m-0">{{ categoria.nombre }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -2,6 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
 
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'assets/img/leaflet/marker-icon-2x.png',
+  iconUrl: 'assets/img/leaflet/marker-icon.png',
+  shadowUrl: 'assets/img/leaflet/marker-shadow.png',
+});
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -12,6 +20,8 @@ import * as L from 'leaflet';
 export class HomeComponent implements AfterViewInit {
   selectedStore: any = null;
   map!: L.Map;
+
+  
 
   stores = [
     {

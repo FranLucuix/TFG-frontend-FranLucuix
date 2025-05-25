@@ -4,11 +4,14 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 export interface Producto {
-  id: string;
+  idProducto: number;
   nombre: string;
-  categoria: string;
+  precio: number;
+  precioRebajado:number;
   stock: number;
-  imagen: string;
+  descripcion:string;
+  categoria: string;
+  imagenUrl: string;
 }
 
 @Injectable({
@@ -21,6 +24,22 @@ export class ProductoService {
 
   getProductos(): Observable<Producto[]> {
     return this.http.get<Producto[]>(this.apiUrl);
+  }
+
+  getProductoPorId(id: number): Observable<Producto> {
+    return this.http.get<Producto>(`${this.apiUrl}/${id}`);
+  }
+
+  crearProducto(producto: Producto): Observable<Producto> {
+    return this.http.post<Producto>(this.apiUrl, producto);
+  }
+
+  actualizarProducto(id: number, producto: Producto): Observable<Producto> {
+    return this.http.put<Producto>(`${this.apiUrl}/${id}`, producto);
+  }
+
+  borrarProducto(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
 
