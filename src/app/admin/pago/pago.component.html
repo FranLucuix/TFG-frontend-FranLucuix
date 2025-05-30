@@ -1,0 +1,79 @@
+<!-- Botón para abrir el modal -->
+<div class="d-flex justify-content-end mb-3">
+  <button class="btn btn-success" (click)="abrirModal()">
+    <i class="bi bi-plus-circle me-1"></i> Nuevo Pago
+  </button>
+</div>
+
+<!-- Modal -->
+<div class="modal" tabindex="-1" [class.show]="modalAbierto" [style.display]="modalAbierto ? 'block' : 'none'">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form #pagoForm="ngForm" (ngSubmit)="guardarPago()">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ editando ? 'Editar Pago' : 'Nuevo Pago' }}</h5>
+          <button type="button" class="btn-close" aria-label="Cerrar" (click)="cerrarModal()"></button>
+        </div>
+        <div class="modal-body">
+
+          <div class="mb-3">
+            <label for="tipo" class="form-label">Tipo *</label>
+            <input type="text" id="tipo" class="form-control" name="tipo" [(ngModel)]="nuevoPago.tipo" maxlength="50" required />
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="pagoForm.invalid">
+            {{ editando ? 'Actualizar' : 'Guardar' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Tabla -->
+<table class="table table-dark table-hover table-bordered align-middle mt-4">
+  <thead>
+    <tr>
+      <th>ID Pago</th>
+      <th>Tipo</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let pago of pagos">
+      <td>{{ pago.idPago }}</td>
+      <td>{{ pago.tipo }}</td>
+      <td>
+        <button class="btn btn-sm btn-warning me-1" (click)="editarPago(pago)">
+          <i class="bi bi-pencil-fill"></i>
+        </button>
+        <button class="btn btn-sm btn-danger" (click)="abrirModalConfirmacion(pago.idPago)">
+          <i class="bi bi-trash-fill"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Modal Confirmación Eliminación oscuro -->
+<div class="modal" tabindex="-1" [class.show]="modalConfirmacionAbierto"
+  [style.display]="modalConfirmacionAbierto ? 'block' : 'none'" style="background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title text-danger">Confirmar Eliminación</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="cerrarModalConfirmacion()" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <p>¿Estás seguro de que deseas eliminar este pago? Esta acción no se puede deshacer.</p>
+      </div>
+      <div class="modal-footer border-secondary">
+        <button class="btn btn-secondary" (click)="cerrarModalConfirmacion()">Cancelar</button>
+        <button class="btn btn-danger" (click)="confirmarBorrado()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>

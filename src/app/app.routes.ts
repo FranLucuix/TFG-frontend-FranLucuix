@@ -15,6 +15,10 @@ export const routes: Routes = [
     path: 'admin',
     loadChildren: () => import('./admin/admin.routes').then(m => m.ADMIN_ROUTES)
   },
+  {
+    path: 'carrito',
+    loadComponent: () => import('./carrito/carrito.component').then(m => m.CarritoComponent)
+  },
 
 
 ];

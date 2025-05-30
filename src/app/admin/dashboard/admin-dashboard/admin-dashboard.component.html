@@ -1,26 +1,34 @@
-<!-- admin-dashboard.component.html -->
-<div class="container-fluid">
-  <div class="row">
-    <!-- Sidebar -->
-    <nav class="col-md-2 d-none d-md-block bg-dark text-white sidebar py-3"
-     style="border: 1px solid #ffffff;">
-      <h5 class="text-center"
-      style="border-bottom: 1px solid #ffffff;">Admin</h5>
-      <ul class="nav flex-column">
-        <li class="nav-item">
-          <a routerLink="/admin/productos" class="nav-link text-white">Gestión de Productos</a>
-        </li>
-        <!-- Puedes añadir más enlaces aquí -->
-        <!-- Ejemplo:
-        <li class="nav-item">
-          <a routerLink="/admin/usuarios" class="nav-link text-white">Gestión de Usuarios</a>
-        </li> -->
-      </ul>
-    </nav>
+<div class="d-flex flex-grow-1 w-100">
 
-    <!-- Main content -->
-    <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4 py-4">
-      <router-outlet></router-outlet>
-    </main>
-  </div>
+  <!-- Sidebar -->
+  <nav class="col-md-2 d-none d-md-block bg-dark text-white d-flex flex-column py-3">
+    <h5 class="text-center border-bottom border-white pb-2">Admin</h5>
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a routerLink="/admin/productos" class="nav-link text-white">Gestión de Productos</a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/admin/usuarios" class="nav-link text-white">Gestión de Usuarios</a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/admin/pedidos" class="nav-link text-white">Gestión de Pedidos</a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/admin/pagos" class="nav-link text-white">Gestión de Pagos</a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/admin/carrito" class="nav-link text-white">Gestión de Carrito</a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/admin/carrito-producto" class="nav-link text-white">Gestión de Carrito-Producto</a>
+      </li>
+    </ul>
+  </nav>
+
+
+  <!-- Main content -->
+  <main class="col px-4 py-4 overflow-auto">
+    <router-outlet></router-outlet>
+  </main>
+
 </div>

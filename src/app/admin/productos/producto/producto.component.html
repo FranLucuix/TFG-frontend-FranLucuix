@@ -78,6 +78,9 @@
     </div>
 </div>
 
+
+
+
 <!-- Tabla -->
 <table class="table table-dark table-hover table-bordered align-middle mt-4">
     <thead>
@@ -108,10 +111,32 @@
                 <button class="btn btn-sm btn-warning me-1" (click)="editarProducto(producto)">
                     <i class="bi bi-pencil-fill"></i>
                 </button>
-                <button class="btn btn-sm btn-danger" (click)="borrarProducto(producto.idProducto)">
+                <button class="btn btn-sm btn-danger" (click)="abrirModalConfirmacion(producto.idProducto)">
                     <i class="bi bi-trash-fill"></i>
                 </button>
+
             </td>
         </tr>
     </tbody>
 </table>
+
+<!-- Modal de Confirmación de Eliminación (oscuro) -->
+<div class="modal" tabindex="-1" [class.show]="modalConfirmacionAbierto"
+    [style.display]="modalConfirmacionAbierto ? 'block' : 'none'" style="background-color: rgba(0, 0, 0, 0.5);">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title text-danger">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close btn-close-white" (click)="cerrarModalConfirmacion()"
+                    aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que deseas eliminar este producto? Esta acción no se puede deshacer.</p>
+            </div>
+            <div class="modal-footer border-secondary">
+                <button class="btn btn-secondary" (click)="cerrarModalConfirmacion()">Cancelar</button>
+                <button class="btn btn-danger" (click)="confirmarBorrado()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>

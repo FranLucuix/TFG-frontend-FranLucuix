@@ -1,11 +1,15 @@
-<header>
-  <app-header></app-header>
-</header>
+<div class="d-flex flex-column min-vh-100">
 
-<main>
-  <router-outlet></router-outlet>
-</main>
+  <header>
+    <app-header></app-header>
+  </header>
 
-<footer>
-  <app-footer></app-footer>
-</footer>
+  <main class="flex-grow-1 d-flex flex-column">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer>
+    <app-footer></app-footer>
+  </footer>
+  
+</div>

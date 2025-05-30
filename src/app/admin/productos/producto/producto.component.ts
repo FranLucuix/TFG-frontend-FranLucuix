@@ -16,6 +16,8 @@ export class ProductoComponent implements OnInit {
   cargando = true;
   error: string | null = null;
   modalAbierto = false;
+  modalConfirmacionAbierto = false;
+  productoAEliminar: number | null = null;
   imagenSeleccionada: File | null = null;
   editando = false;
 
@@ -133,27 +135,46 @@ export class ProductoComponent implements OnInit {
   }
 
   confirmarActualizar() {
-  this.productoService.actualizarProducto(this.nuevoProducto.idProducto, this.nuevoProducto).subscribe({
-    next: (productoActualizado) => {
-      const index = this.productos.findIndex(p => p.idProducto === productoActualizado.idProducto);
-      if (index !== -1) {
-        this.productos[index] = productoActualizado;
+    this.productoService.actualizarProducto(this.nuevoProducto.idProducto, this.nuevoProducto).subscribe({
+      next: (productoActualizado) => {
+        const index = this.productos.findIndex(p => p.idProducto === productoActualizado.idProducto);
+        if (index !== -1) {
+          this.productos[index] = productoActualizado;
+        }
+        setTimeout(() => this.cerrarModal(), 300);
+      },
+      error: (err) => {
+        this.error = 'Error al actualizar producto';
+        console.error(err);
       }
-      setTimeout(() => this.cerrarModal(), 300);
-    },
-    error: (err) => {
-      this.error = 'Error al actualizar producto';
-      console.error(err);
-    }
-  });
-}
-
+    });
+  }
 
   editarProducto(producto: Producto) {
     this.nuevoProducto = { ...producto };
     this.imagenSeleccionada = null;
     this.editando = true;
     this.modalAbierto = true;
+  }
+
+  // 🔴 NUEVO: abre el modal de confirmación
+  abrirModalConfirmacion(id: number) {
+    this.productoAEliminar = id;
+    this.modalConfirmacionAbierto = true;
+  }
+
+  // 🔴 NUEVO: cierra el modal sin borrar
+  cerrarModalConfirmacion() {
+    this.modalConfirmacionAbierto = false;
+    this.productoAEliminar = null;
+  }
+
+  // 🔴 NUEVO: borra el producto si hay uno seleccionado
+  confirmarBorrado() {
+    if (this.productoAEliminar !== null) {
+      this.borrarProducto(this.productoAEliminar);
+      this.cerrarModalConfirmacion();
+    }
   }
 
   borrarProducto(id: number) {

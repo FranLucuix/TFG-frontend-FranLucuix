@@ -1,0 +1,82 @@
+<!-- Botón para abrir el modal -->
+<div class="d-flex justify-content-end mb-3">
+  <button class="btn btn-success" (click)="abrirModal()">
+    <i class="bi bi-plus-circle me-1"></i> Nuevo Usuario
+  </button>
+</div>
+
+<!-- Modal -->
+<div class="modal" tabindex="-1" [class.show]="modalAbierto" [style.display]="modalAbierto ? 'block' : 'none'">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form #usuarioForm="ngForm" (ngSubmit)="guardarUsuario()">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ editando ? 'Editar Usuario' : 'Nuevo Usuario' }}</h5>
+          <button type="button" class="btn-close" (click)="cerrarModal()" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre *</label>
+            <input id="nombre" name="nombre" type="text" class="form-control"
+              [(ngModel)]="nuevoUsuario.nombre" required maxlength="30" />
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Email *</label>
+            <input id="email" name="email" type="email" class="form-control"
+              [(ngModel)]="nuevoUsuario.email" required />
+          </div>
+
+          <div class="mb-3">
+            <label for="rol" class="form-label">Rol *</label>
+            <select id="rol" name="rol" class="form-select" [(ngModel)]="nuevoUsuario.rol" required>
+              <option value="cliente">Cliente</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+
+          <div *ngIf="error" class="alert alert-danger">
+            {{ error }}
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="usuarioForm.invalid">
+            {{ editando ? 'Actualizar' : 'Guardar' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Tabla -->
+<table class="table table-dark table-hover table-bordered align-middle mt-4">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Email</th>
+      <th>Rol</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let usuario of usuarios">
+      <td>{{ usuario.idUsuario }}</td>
+      <td>{{ usuario.nombre }}</td>
+      <td>{{ usuario.email }}</td>
+      <td>{{ usuario.rol }}</td>
+      <td>
+        <button class="btn btn-sm btn-warning me-1" (click)="editarUsuario(usuario)">
+          <i class="bi bi-pencil-fill"></i>
+        </button>
+        <button class="btn btn-sm btn-danger" (click)="borrarUsuario(usuario.idUsuario)">
+          <i class="bi bi-trash-fill"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>

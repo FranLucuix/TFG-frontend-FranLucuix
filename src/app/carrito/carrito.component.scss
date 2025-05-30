@@ -1,0 +1,26 @@
+
+.imagen-hover {
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+#imagenModal .modal-dialog {
+  max-width: 600px;
+}
+
+#imagenModal .modal-content {
+  background-color: #212529;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+#imagenModal .modal-body img {
+  max-height: 400px;
+  object-fit: contain;
+  width: 100%;
+}

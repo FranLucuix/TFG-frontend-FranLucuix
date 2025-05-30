@@ -1,0 +1,94 @@
+<!-- MODAL GLOBAL -->
+<div class="modal fade" id="imagenModal" tabindex="-1" aria-labelledby="imagenModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-light rounded shadow-lg border-secondary">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="imagenModalLabel">Vista del producto</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img [src]="imagenSeleccionada" alt="Producto" class="img-fluid rounded"
+                    style="max-width: 100%; max-height: 500px; object-fit: contain;" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CONTENEDOR PRINCIPAL -->
+<div class="container my-5 text-light bg-dark p-4 rounded shadow-lg">
+    <h2 class="mb-4 text-center">🛒 Mi Carrito</h2>
+
+    <!-- Cargando -->
+    <div *ngIf="cargando" class="text-center my-5">
+        <div class="spinner-border text-light" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+    </div>
+
+    <!-- Carrito vacío -->
+    <div *ngIf="!cargando && items.length === 0" class="text-center">
+        <p class="lead">Tu carrito está vacío.</p>
+        <a routerLink="/catalog" class="btn btn-outline-light mt-3">Ir al catálogo</a>
+    </div>
+
+    <!-- Carrito con productos -->
+    <div *ngIf="!cargando && items.length > 0">
+        <div class="row align-items-center border-bottom py-4 gx-4" *ngFor="let item of items">
+            <!-- Imagen -->
+            <div class="col-md-2 col-4 d-flex justify-content-center">
+                <div class="bg-dark rounded overflow-hidden imagen-hover"
+                    style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; cursor: pointer"
+                    (click)="abrirModal(item.producto.imagenUrl)">
+                    <img [src]="baseUrl + item.producto.imagenUrl" alt="{{ item.producto.nombre }}"
+                        class="img-fluid imagen-hover" style="max-height: 90px; object-fit: contain" />
+                </div>
+            </div>
+
+            <!-- Detalles -->
+            <div class="col-md-4 col-8">
+                <h5 class="mb-1">{{ item.producto.nombre }}</h5>
+                <p class="mb-1 text-muted">{{ item.producto.categoria }}</p>
+                <p class="mb-0">
+                    <span *ngIf="item.producto.precioRebajado > 0; else precioNormal">
+                        <span class="text-success fw-bold me-2">€{{ item.producto.precioRebajado | euro }}</span>
+                        <small class="text-decoration-line-through text-muted">€{{ item.producto.precio | euro
+                            }}</small>
+                    </span>
+                    <ng-template #precioNormal>
+                        <span class="text-success fw-bold">€{{ item.producto.precio | euro }}</span>
+                    </ng-template>
+                </p>
+            </div>
+
+            <!-- Cantidad -->
+            <div class="col-md-3 col-6 mt-3 mt-md-0">
+                <label for="cantidad-{{ item.producto.idProducto }}" class="form-label">Cantidad:</label>
+                <input type="number" class="form-control form-control-sm bg-dark text-light border-secondary"
+                    id="cantidad-{{ item.producto.idProducto }}" [value]="item.cantidad" min="1"
+                    (change)="actualizarCantidad(item, $event)" />
+            </div>
+
+            <!-- Eliminar -->
+            <div class="col-md-3 col-6 text-md mt-3 mt-md-0">
+                <label class="form-label">Acción:</label>
+                <button class="btn btn-sm btn-outline-danger w-100 w-md-auto" (click)="eliminarItem(item)">
+                    <i class="bi bi-trash"></i> Borrar del carrito
+                </button>
+            </div>
+        </div>
+
+        <!-- Total y acciones -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 pt-4 border-top">
+            <h4 class="text-success mb-3 mb-md-0">Total: €{{ total | euro }}</h4>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-outline-warning" (click)="vaciarCarrito()">
+                    <i class="bi bi-x-circle"></i> Vaciar Carrito
+                </button>
+                <button class="btn btn-success" disabled>
+                    <i class="bi bi-credit-card"></i> Realizar Pedido
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

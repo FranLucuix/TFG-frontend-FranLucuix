@@ -9,32 +9,44 @@
     <p>{{ error }}</p>
   </div>
 
+  <!-- Contenedor flex para los botones, con espacio entre ellos -->
+  <div class="mb-4 d-flex justify-content-center gap-3">
+    <button class="btn btn-outline-light" (click)="volverAlCatalogo()">
+      Ir al catálogo
+    </button>
+    <button class="btn btn-outline-light" (click)="volverAlCarrito()">
+      🛒 Ir al carrito
+    </button>
+
+  </div>
+
   <div class="row g-4 justify-content-center" *ngIf="!cargando && productosFiltrados.length">
     <div class="col-12 col-sm-6 col-md-4" *ngFor="let producto of productosFiltrados">
-      <div 
-        class="card h-100 bg-dark text-white border-0 shadow-sm" 
-        style="transition: transform 0.3s ease; cursor: pointer;"
-        (click)="productoSeleccionado = producto" 
-        data-bs-toggle="modal" data-bs-target="#productoModal"
-        onmouseover="this.style.transform='scale(1.1)'" 
-        onmouseout="this.style.transform='scale(1)'"
-      >
-        <img 
-          [src]="baseUrl + producto.imagenUrl" 
-          [alt]="producto.nombre" 
-          class="card-img-top img-fluid" 
-          style="height: 200px; object-fit: cover;"
-        />
+      <div class="card h-100 bg-dark text-white border-0 shadow-sm position-relative"
+        style="transition: transform 0.3s ease; cursor: pointer;" (click)="productoSeleccionado = producto"
+        data-bs-toggle="modal" data-bs-target="#productoModal" onmouseover="this.style.transform='scale(1.1)'"
+        onmouseout="this.style.transform='scale(1)'">
+        <img [src]="baseUrl + producto.imagenUrl" [alt]="producto.nombre" class="card-img-top img-fluid"
+          style="height: 200px; object-fit: cover;" />
+        <div *ngIf="producto.stock === 0"
+          class="position-absolute top-0 start-0 bg-danger text-white px-2 py-1 fw-bold rounded-end">
+          Sin existencias actualmente
+        </div>
         <div class="card-body">
           <h5 class="card-title">{{ producto.nombre }}</h5>
-          <p class="card-text mb-1">Stock: {{ producto.stock }}</p>
           <p class="card-text">
-            <ng-container *ngIf="producto.precioRebajado > 0 && producto.precioRebajado < producto.precio; else sinRebaja">
-              <span class="text-muted text-decoration-line-through me-2">{{ producto.precio | currency }}</span>
-              <span class="text-success fw-bold">{{ producto.precioRebajado | currency }}</span>
+            <ng-container
+              *ngIf="producto.precioRebajado > 0 && producto.precioRebajado < producto.precio; else sinRebaja">
+              <span class="text-white text-decoration-line-through me-2">{{ producto.precio | euro }}</span>
+              <div class="text-end">
+                <span class="text-success fw-bold fs-5">{{ producto.precioRebajado | euro }}</span>
+              </div>
+
             </ng-container>
             <ng-template #sinRebaja>
-              <span class="text-white fw-bold">{{ producto.precio | currency }}</span>
+              <div class="text-end">
+                <span class="text-white fw-bold">{{ producto.precio | euro }}</span>
+              </div>
             </ng-template>
           </p>
         </div>
@@ -46,7 +58,6 @@
     <p class="text-muted">No hay productos en esta categoría.</p>
   </div>
 
-  <!-- Modal para seleccionar cantidad -->
   <div class="modal fade" id="productoModal" tabindex="-1" aria-labelledby="productoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content bg-dark text-white">
@@ -56,7 +67,11 @@
         </div>
         <div class="modal-body">
           <p>Seleccione la cantidad:</p>
-          <input type="number" class="form-control" [(ngModel)]="cantidadSeleccionada" min="1" [max]="productoSeleccionado?.stock || 1" />
+          <input type="number" class="form-control" [(ngModel)]="cantidadSeleccionada" min="1"
+            [max]="productoSeleccionado?.stock || 1" />
+        </div>
+        <div *ngIf="mensajeErrorStock" class="text-danger mt-2">
+          {{ mensajeErrorStock }}
         </div>
         <div class="modal-footer border-0">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>

@@ -17,7 +17,31 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () =>
           import('./productos/producto/producto.component').then(m => m.ProductoComponent),
       },
+      {
+        path: 'usuarios',
+        loadComponent: () =>
+          import('./usuario/usuario.component').then(m => m.UsuarioComponent),
+      },
+      {
+        path: 'pedidos',
+        loadComponent: () =>
+          import('./pedido/pedido.component').then(m => m.PedidoComponent),
+      },
+      {
+        path: 'pagos',
+        loadComponent: () =>
+          import('./pago/pago.component').then(m => m.PagoComponent),
+      },
+      {
+        path: 'carrito',
+        loadComponent: () =>
+          import('../carrito/carrito.component').then(m => m.CarritoComponent),
+      },
+      {
+        path: 'carrito-producto',
+        loadComponent: () =>
+          import('./carrito-producto/carrito-producto.component').then(m => m.CarritoProductoComponent),
+      }
     ]
   }
 ];
-

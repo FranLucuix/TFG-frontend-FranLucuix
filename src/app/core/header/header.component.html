@@ -1,4 +1,4 @@
-<nav class="navbar navbar-dark bg-dark px-4 position-relative" style="height: 70px;">
+<nav class="navbar navbar-dark bg-dark px-4 position-relative" style="height: 70px; border-bottom: 1px solid white;">
 
     <div class="dropdown h-100 d-flex align-items-center justify-content-center" style="width: 48px; cursor: pointer;"
         onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)'"
@@ -32,17 +32,9 @@
             aria-expanded="false"></i>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="menuToggle">
             <li><a class="dropdown-item" routerLink="/home">Inicio</a></li>
-            <li class="dropdown-submenu dropend">
-                <a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown">Tiendas</a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Madrid</a></li>
-                    <li><a class="dropdown-item" href="#">Sevilla</a></li>
-                </ul>
-            </li>
             <li><a class="dropdown-item" routerLink="/catalog">Catálogo</a></li>
-            <li><a class="dropdown-item" href="#">Contacto</a></li>
             <li><a class="dropdown-item" href="#">Mi cuenta</a></li>
-            <li><a class="dropdown-item" href="#">Carrito</a></li>
+            <li><a class="dropdown-item" href="/carrito">Carrito</a></li>
         </ul>
     </div>
 
