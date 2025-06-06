@@ -18,22 +18,22 @@ export class UsuarioService {
   constructor(private http: HttpClient) {}
 
   getUsuarios(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(this.apiUrl);
+    return this.http.get<Usuario[]>(this.apiUrl, { withCredentials: true });
   }
 
   getUsuarioPorId(id: number): Observable<Usuario> {
-    return this.http.get<Usuario>(`${this.apiUrl}/${id}`);
+    return this.http.get<Usuario>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
 
   crearUsuario(usuario: Usuario): Observable<Usuario> {
-    return this.http.post<Usuario>(this.apiUrl, usuario);
+    return this.http.post<Usuario>(this.apiUrl, usuario, { withCredentials: true });
   }
 
   actualizarUsuario(id: number, usuario: Usuario): Observable<Usuario> {
-    return this.http.put<Usuario>(`${this.apiUrl}/${id}`, usuario);
+    return this.http.put<Usuario>(`${this.apiUrl}/${id}`, usuario, { withCredentials: true });
   }
 
   borrarUsuario(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
 }

@@ -1,0 +1,38 @@
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card p-4 shadow-sm" style="max-width: 400px; width: 100%;">
+      <h2 class="mb-4 text-center">Registro</h2>
+  
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <div class="mb-3">
+          <label for="nombre" class="form-label">Nombre</label>
+          <input id="nombre" type="text" formControlName="nombre" class="form-control" [ngClass]="{'is-invalid': form.get('nombre')?.invalid && form.get('nombre')?.touched}" />
+          <div *ngIf="form.get('nombre')?.invalid && form.get('nombre')?.touched" class="invalid-feedback">
+            Nombre es obligatorio y debe tener máximo 100 caracteres.
+          </div>
+        </div>
+  
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input id="email" type="email" formControlName="email" class="form-control" [ngClass]="{'is-invalid': form.get('email')?.invalid && form.get('email')?.touched}" />
+          <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="invalid-feedback">
+            Introduce un email válido.
+          </div>
+        </div>
+  
+        <div class="mb-3">
+          <label for="password" class="form-label">Contraseña</label>
+          <input id="password" type="password" formControlName="password" class="form-control" [ngClass]="{'is-invalid': form.get('password')?.invalid && form.get('password')?.touched}" />
+          <div *ngIf="form.get('password')?.invalid && form.get('password')?.touched" class="invalid-feedback">
+            Mínimo 6 caracteres.
+          </div>
+        </div>
+  
+        <div *ngIf="error" class="alert alert-danger" role="alert">
+          {{ error }}
+        </div>
+  
+        <button type="submit" class="btn btn-success w-100" [disabled]="form.invalid">Registrarse</button>
+      </form>
+    </div>
+  </div>
+  

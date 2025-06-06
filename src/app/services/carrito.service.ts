@@ -17,22 +17,22 @@ export class CarritoService {
   constructor(private http: HttpClient) {}
 
   getCarritos(): Observable<Carrito[]> {
-    return this.http.get<Carrito[]>(this.apiUrl);
+    return this.http.get<Carrito[]>(this.apiUrl, { withCredentials: true });
   }
 
   getCarritoPorId(idCarrito: number, idProducto: number): Observable<Carrito> {
-    return this.http.get<Carrito>(`${this.apiUrl}/${idCarrito}/${idProducto}`);
+    return this.http.get<Carrito>(`${this.apiUrl}/${idCarrito}/${idProducto}`, { withCredentials: true });
   }
 
   agregarAlCarrito(carrito: Carrito): Observable<Carrito> {
-    return this.http.post<Carrito>(this.apiUrl, carrito);
+    return this.http.post<Carrito>(this.apiUrl, carrito, { withCredentials: true });
   }
 
   actualizarCarrito(idCarrito: number, idProducto: number, carrito: Carrito): Observable<Carrito> {
-    return this.http.put<Carrito>(`${this.apiUrl}/${idCarrito}/${idProducto}`, carrito);
+    return this.http.put<Carrito>(`${this.apiUrl}/${idCarrito}/${idProducto}`, carrito, { withCredentials: true });
   }
 
   eliminarDelCarrito(idCarrito: number, idProducto: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${idCarrito}/${idProducto}`);
+    return this.http.delete<void>(`${this.apiUrl}/${idCarrito}/${idProducto}`, { withCredentials: true });
   }
 }

@@ -16,22 +16,22 @@ export class PagoService {
   constructor(private http: HttpClient) {}
 
   getPagos(): Observable<Pago[]> {
-    return this.http.get<Pago[]>(this.apiUrl);
+    return this.http.get<Pago[]>(this.apiUrl, { withCredentials: true });
   }
 
   getPagoPorId(id: number): Observable<Pago> {
-    return this.http.get<Pago>(`${this.apiUrl}/${id}`);
+    return this.http.get<Pago>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
 
   crearPago(pago: Pago): Observable<Pago> {
-    return this.http.post<Pago>(this.apiUrl, pago);
+    return this.http.post<Pago>(this.apiUrl, pago, { withCredentials: true });
   }
 
   actualizarPago(id: number, pago: Pago): Observable<Pago> {
-    return this.http.put<Pago>(`${this.apiUrl}/${id}`, pago);
+    return this.http.put<Pago>(`${this.apiUrl}/${id}`, pago, { withCredentials: true });
   }
 
   borrarPago(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
 }

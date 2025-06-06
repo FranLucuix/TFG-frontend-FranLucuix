@@ -1,45 +1,79 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, tap } from 'rxjs';
+import { Observable, BehaviorSubject, tap } from 'rxjs';
+
+export interface LoginRequest {
+  username: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  idUsuario: number;
+  nombre: string;
+  email: string;
+  rol: string;
+}
+
+export interface RegistroRequest {
+  nombre: string;
+  email: string;
+  password: string;
+}
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:8080/auth';
-  private userSubject = new BehaviorSubject<any>(null);
-  user$ = this.userSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  private apiUrl = 'http://localhost:8080/auth';
+  private currentUserSubject: BehaviorSubject<LoginResponse | null>;
+  public currentUser$: Observable<LoginResponse | null>;
 
-  login(username: string, password: string) {
-    return this.http.post<any>(`${this.baseUrl}/login`, { username, password }).pipe(
-      tap((user) => {
-        localStorage.setItem('user', JSON.stringify(user));
-        this.userSubject.next(user);
+  constructor(private http: HttpClient) {
+    const savedUser = localStorage.getItem('usuario');
+    this.currentUserSubject = new BehaviorSubject<LoginResponse | null>(
+      savedUser ? JSON.parse(savedUser) : null
+    );
+    this.currentUser$ = this.currentUserSubject.asObservable();
+  }
+
+  login(datos: LoginRequest): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, datos, { withCredentials: true }).pipe(
+      tap(user => {
+        localStorage.setItem('usuario', JSON.stringify(user));
+        this.currentUserSubject.next(user);
       })
     );
   }
 
-  register(data: any) {
-    return this.http.post<any>(`${this.baseUrl}/registro`, data);
+  registro(usuario: RegistroRequest): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/registro`, usuario, { withCredentials: true });
   }
 
-  logout() {
-    localStorage.removeItem('user');
-    this.userSubject.next(null);
-    return this.http.post(`${this.baseUrl}/logout`, {});
+  logout(): Observable<any> {
+    return this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true }).pipe(
+      tap({
+        next: () => this.clearAuth(),
+        error: () => this.clearAuth() 
+      })
+    );
+  }
+  
+
+  clearAuth(): void {
+    localStorage.removeItem('usuario');
+    this.currentUserSubject.next(null);
   }
 
-  get currentUser() {
-    return this.userSubject.value || JSON.parse(localStorage.getItem('user') || 'null');
+  getUser(): LoginResponse | null {
+    return this.currentUserSubject.value;
   }
 
   isLoggedIn(): boolean {
-    return !!this.currentUser;
+    return !!this.currentUserSubject.value;
   }
 
-  hasRole(role: string): boolean {
-    return this.currentUser?.rol === role;
+  isAdmin(): boolean {
+    return this.currentUserSubject.value?.rol === 'ADMIN';
   }
 }

@@ -22,22 +22,22 @@ export class PedidoService {
   constructor(private http: HttpClient) {}
 
   getPedidos(): Observable<Pedido[]> {
-    return this.http.get<Pedido[]>(this.apiUrl);
+    return this.http.get<Pedido[]>(this.apiUrl, { withCredentials: true });
   }
 
   getPedidoPorId(id: number): Observable<Pedido> {
-    return this.http.get<Pedido>(`${this.apiUrl}/${id}`);
+    return this.http.get<Pedido>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
 
   crearPedido(pedido: Pedido): Observable<Pedido> {
-    return this.http.post<Pedido>(this.apiUrl, pedido);
+    return this.http.post<Pedido>(this.apiUrl, pedido, { withCredentials: true });
   }
 
   actualizarPedido(id: number, pedido: Pedido): Observable<Pedido> {
-    return this.http.put<Pedido>(`${this.apiUrl}/${id}`, pedido);
+    return this.http.put<Pedido>(`${this.apiUrl}/${id}`, pedido, { withCredentials: true });
   }
 
   borrarPedido(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
 }

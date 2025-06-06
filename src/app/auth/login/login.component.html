@@ -1,1 +1,30 @@
-<p>login works!</p>
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card p-4 shadow-sm" style="max-width: 400px; width: 100%;">
+      <h2 class="mb-4 text-center">Iniciar Sesión</h2>
+  
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <div class="mb-3">
+          <label for="username" class="form-label">Usuario o Email</label>
+          <input id="username" formControlName="username" type="text" class="form-control" [ngClass]="{'is-invalid': form.get('username')?.invalid && form.get('username')?.touched}" />
+          <div *ngIf="form.get('username')?.invalid && form.get('username')?.touched" class="invalid-feedback">
+            El usuario es obligatorio.
+          </div>
+        </div>
+  
+        <div class="mb-3">
+          <label for="password" class="form-label">Contraseña</label>
+          <input id="password" formControlName="password" type="password" class="form-control" [ngClass]="{'is-invalid': form.get('password')?.invalid && form.get('password')?.touched}" />
+          <div *ngIf="form.get('password')?.invalid && form.get('password')?.touched" class="invalid-feedback">
+            La contraseña es obligatoria.
+          </div>
+        </div>
+  
+        <div *ngIf="error" class="alert alert-danger" role="alert">
+          {{ error }}
+        </div>
+  
+        <button type="submit" class="btn btn-primary w-100" [disabled]="form.invalid">Entrar</button>
+      </form>
+    </div>
+  </div>
+  
