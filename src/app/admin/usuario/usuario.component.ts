@@ -13,6 +13,8 @@ export class UsuarioComponent implements OnInit {
   usuarios: Usuario[] = [];
   nuevoUsuario: Usuario = this.initUsuario();
   modalAbierto = false;
+  modalConfirmacionAbierto = false;
+  usuarioAEliminar: number | null = null;
   editando = false;
   error: string | null = null;
 
@@ -44,50 +46,70 @@ export class UsuarioComponent implements OnInit {
     this.editando = false;
     this.error = null;
   }
+guardarUsuario() {
+  if (this.editando) {
+    const usuarioAActualizar = { ...this.nuevoUsuario };
 
-  guardarUsuario() {
-    if (this.editando) {
-      this.usuarioService.actualizarUsuario(this.nuevoUsuario.idUsuario, this.nuevoUsuario).subscribe({
-        next: (actualizado) => {
-          const index = this.usuarios.findIndex(u => u.idUsuario === actualizado.idUsuario);
-          if (index !== -1) this.usuarios[index] = actualizado;
-          this.cerrarModal();
-        },
-        error: (err) => {
-          this.error = 'Error al actualizar usuario';
-          console.error(err);
-        }
-      });
-    } else {
-      this.usuarioService.crearUsuario(this.nuevoUsuario).subscribe({
-        next: (nuevo) => {
-          this.usuarios.push(nuevo);
-          this.cerrarModal();
-        },
-        error: (err) => {
-          this.error = 'Error al crear usuario';
-          console.error(err);
-        }
-      });
+    if (!usuarioAActualizar.password?.trim()) {
+      delete usuarioAActualizar.password;
     }
+
+    this.usuarioService.actualizarUsuario(usuarioAActualizar.idUsuario, usuarioAActualizar).subscribe({
+      next: (actualizado) => {
+        const index = this.usuarios.findIndex(u => u.idUsuario === actualizado.idUsuario);
+        if (index !== -1) this.usuarios[index] = actualizado;
+        this.cerrarModal();
+      },
+      error: (err) => {
+        this.error = 'Error al actualizar usuario';
+        console.error(err);
+      }
+    });
+
+  } else {
+    this.usuarioService.crearUsuario(this.nuevoUsuario).subscribe({
+      next: (nuevo) => {
+        this.usuarios.push(nuevo);
+        this.cerrarModal();
+      },
+      error: (err) => {
+        this.error = 'Error al crear usuario';
+        console.error(err);
+      }
+    });
   }
+}
+
 
   editarUsuario(usuario: Usuario) {
-    this.nuevoUsuario = { ...usuario };
+    this.nuevoUsuario = { ...usuario, password: '' };
     this.editando = true;
     this.modalAbierto = true;
   }
 
-  borrarUsuario(id: number) {
-    this.usuarioService.borrarUsuario(id).subscribe({
-      next: () => {
-        this.usuarios = this.usuarios.filter(u => u.idUsuario !== id);
-      },
-      error: (err) => {
-        this.error = 'Error al borrar usuario';
-        console.error(err);
-      }
-    });
+  abrirModalConfirmacion(id: number) {
+    this.usuarioAEliminar = id;
+    this.modalConfirmacionAbierto = true;
+  }
+
+  cerrarModalConfirmacion() {
+    this.modalConfirmacionAbierto = false;
+    this.usuarioAEliminar = null;
+  }
+
+  confirmarBorrado() {
+    if (this.usuarioAEliminar !== null) {
+      this.usuarioService.borrarUsuario(this.usuarioAEliminar).subscribe({
+        next: () => {
+          this.usuarios = this.usuarios.filter(u => u.idUsuario !== this.usuarioAEliminar);
+          this.cerrarModalConfirmacion();
+        },
+        error: (err) => {
+          this.error = 'Error al borrar usuario';
+          console.error(err);
+        }
+      });
+    }
   }
 
   private initUsuario(): Usuario {
@@ -95,7 +117,8 @@ export class UsuarioComponent implements OnInit {
       idUsuario: 0,
       nombre: '',
       email: '',
-      rol: 'cliente'
+      rol: 'cliente',
+      password: ''
     };
   }
 }

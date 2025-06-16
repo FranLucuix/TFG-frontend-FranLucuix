@@ -7,6 +7,7 @@ export interface Usuario {
   nombre: string;
   email: string;
   rol: string;
+   password?: string;
 }
 
 @Injectable({

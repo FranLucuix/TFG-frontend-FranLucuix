@@ -1,51 +1,82 @@
 <nav class="navbar navbar-dark bg-dark px-4 position-relative" style="height: 70px; border-bottom: 1px solid white;">
 
-    <div class="dropdown h-100 d-flex align-items-center justify-content-center" style="width: 48px; cursor: pointer;"
-        onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)'"
-        onmouseout="this.style.backgroundColor='transparent'">
-        <button class="btn border-0 bg-transparent p-0 w-100 h-100 d-flex align-items-center justify-content-center"
+    <div class="dropdown h-100 d-flex align-items-center justify-content-center user-menu-container" 
+         style="width: 48px; cursor: pointer;">
+        <button class="btn border-0 bg-transparent p-0 w-100 h-100 d-flex align-items-center justify-content-center user-menu-btn"
             type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="bi bi-person-fill fs-5 text-white"></i>
         </button>
-        <ul class="dropdown-menu" aria-labelledby="userMenuButton">
+        
+        <ul class="dropdown-menu user-dropdown-menu shadow-lg" aria-labelledby="userMenuButton">
             <ng-container *ngIf="!authService.isLoggedIn()">
-              <li><a class="dropdown-item" routerLink="/login">Iniciar sesión</a></li>
-              <li><a class="dropdown-item" routerLink="/registro">Registrarse</a></li>
+                <li>
+                    <a class="dropdown-item user-dropdown-item" routerLink="/login">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>
+                        Iniciar sesión
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item user-dropdown-item" routerLink="/registro">
+                        <i class="bi bi-person-plus me-2"></i>
+                        Registrarse
+                    </a>
+                </li>
             </ng-container>
           
             <ng-container *ngIf="authService.isLoggedIn()">
-              <li *ngIf="authService.isAdmin()">
-                <a class="dropdown-item" routerLink="/admin">Panel de administración</a>
-              </li>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-              <li>
-                <a class="dropdown-item" (click)="logout()">Cerrar sesión</a>
-              </li>
+                <li *ngIf="authService.isAdmin()">
+                    <a class="dropdown-item user-dropdown-item" routerLink="/admin">
+                        <i class="bi bi-gear-fill me-2"></i>
+                        Panel de administración
+                    </a>
+                </li>
+                <li *ngIf="authService.isAdmin()">
+                    <hr class="dropdown-divider my-1" />
+                </li>
+                <li>
+                    <a class="dropdown-item user-dropdown-item text-danger" (click)="logout()">
+                        <i class="bi bi-box-arrow-right me-2"></i>
+                        Cerrar sesión
+                    </a>
+                </li>
             </ng-container>
-          </ul>
-          
-          
-
+        </ul>
     </div>
 
-
-    <!-- Logo centrado -->
     <a class="navbar-brand position-absolute top-50 start-50 translate-middle" href="#">
         <img src="assets/img/logo/logoJulioVera.png" alt="Julio Vera Music" height="40">
     </a>
 
-    <div class="dropdown d-flex align-items-center justify-content-center px-2 h-100" style="cursor: pointer;"
-        onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)'"
-        onmouseout="this.style.backgroundColor='transparent'">
-        <i class="bi bi-list fs-2 text-white" role="button" id="menuToggle" data-bs-toggle="dropdown"
-            aria-expanded="false"></i>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="menuToggle">
-            <li><a class="dropdown-item" routerLink="/home">Inicio</a></li>
-            <li><a class="dropdown-item" routerLink="/catalog">Catálogo</a></li>
-            <li><a class="dropdown-item" href="#">Mi cuenta</a></li>
-            <li><a class="dropdown-item" href="/carrito">Carrito</a></li>
+    <div class="dropdown d-flex align-items-center justify-content-center h-100 main-menu-container" 
+         style="cursor: pointer;">
+        <i class="bi bi-list fs-2 text-white main-menu-btn p-2" role="button" id="menuToggle" 
+           data-bs-toggle="dropdown" aria-expanded="false"></i>
+        
+        <ul class="dropdown-menu dropdown-menu-end main-dropdown-menu shadow-lg" aria-labelledby="menuToggle">
+            <li>
+                <a class="dropdown-item main-dropdown-item" routerLink="/home">
+                    <i class="bi bi-house-fill me-2"></i>
+                    Inicio
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item main-dropdown-item" routerLink="/catalog">
+                    <i class="bi bi-grid-3x3-gap-fill me-2"></i>
+                    Catálogo
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item main-dropdown-item" href="/cuenta">
+                    <i class="bi bi-person-lines-fill me-2"></i>
+                    Mi cuenta
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item main-dropdown-item" href="/carrito">
+                    <i class="bi bi-cart-fill me-2"></i>
+                    Carrito
+                </a>
+            </li>
         </ul>
     </div>
 

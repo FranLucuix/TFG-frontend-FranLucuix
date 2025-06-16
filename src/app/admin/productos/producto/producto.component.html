@@ -1,11 +1,9 @@
-<!-- Botón para abrir el modal -->
 <div class="d-flex justify-content-end mb-3">
     <button class="btn btn-success" (click)="abrirModal()">
         <i class="bi bi-plus-circle me-1"></i> Nuevo Producto
     </button>
 </div>
 
-<!-- Modal -->
 <div class="modal" tabindex="-1" [class.show]="modalAbierto" [style.display]="modalAbierto ? 'block' : 'none'">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -24,7 +22,7 @@
                     <div class="mb-3">
                         <label for="categoria" class="form-label">Categoría *</label>
                         <select id="categoria" class="form-select" name="categoria"
-                            [(ngModel)]="nuevoProducto.categoria" required style="position: relative;">
+                            [(ngModel)]="nuevoProducto.categoria" required>
                             <option value="" disabled selected>Seleccione una categoría</option>
                             <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
                         </select>
@@ -56,8 +54,12 @@
 
                     <div *ngIf="nuevoProducto.imagenUrl" class="mb-3 text-center">
                         <label class="form-label">Imagen actual:</label><br />
-                        <img [src]="baseUrl + nuevoProducto.imagenUrl" alt="Imagen actual"
-                            style="max-width: 100%; max-height: 200px; object-fit: contain; border: 1px solid #ddd; padding: 5px; border-radius: 5px;" />
+                        <img [src]="baseUrl + nuevoProducto.imagenUrl" alt="Imagen actual" class="imagen-actual" />
+                        <div class="d-flex justify-content-center mt-2">
+                            <button type="button" class="btn btn-danger" (click)="eliminarImagen()">
+                                Eliminar imagen
+                            </button>
+                        </div>
                     </div>
 
 
@@ -66,6 +68,7 @@
                         <input type="file" id="imagen" class="form-control" (change)="onFileSelected($event)"
                             accept="image/*" [required]="!editando" />
                     </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
@@ -78,25 +81,22 @@
     </div>
 </div>
 
-
-
-
-<!-- Tabla -->
 <table class="table table-dark table-hover table-bordered align-middle mt-4">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Categoría</th>
-            <th>Precio</th>
-            <th>Precio rebajado</th>
-            <th>Stock</th>
+            <th (click)="ordenarPor('idProducto')">ID <i [class]="iconoOrden('idProducto')"></i></th>
+            <th (click)="ordenarPor('nombre')">Nombre <i [class]="iconoOrden('nombre')"></i></th>
+            <th (click)="ordenarPor('categoria')">Categoría <i [class]="iconoOrden('categoria')"></i></th>
+            <th (click)="ordenarPor('precio')">Precio <i [class]="iconoOrden('precio')"></i></th>
+            <th (click)="ordenarPor('precioRebajado')">Precio rebajado <i [class]="iconoOrden('precioRebajado')"></i>
+            </th>
+            <th (click)="ordenarPor('stock')">Stock <i [class]="iconoOrden('stock')"></i></th>
             <th>Imagen</th>
             <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let producto of productos">
+        <tr *ngFor="let producto of productosOrdenados">
             <td>{{ producto.idProducto }}</td>
             <td>{{ producto.nombre }}</td>
             <td>{{ producto.categoria }}</td>
@@ -105,7 +105,7 @@
             <td>{{ producto.stock }}</td>
             <td>
                 <img *ngIf="producto.imagenUrl" [src]="baseUrl + producto.imagenUrl" alt="Imagen producto"
-                    style="max-width: 50px; max-height: 50px;" />
+                    class="imagen-producto" />
             </td>
             <td>
                 <button class="btn btn-sm btn-warning me-1" (click)="editarProducto(producto)">
@@ -114,15 +114,14 @@
                 <button class="btn btn-sm btn-danger" (click)="abrirModalConfirmacion(producto.idProducto)">
                     <i class="bi bi-trash-fill"></i>
                 </button>
-
             </td>
         </tr>
     </tbody>
 </table>
 
-<!-- Modal de Confirmación de Eliminación (oscuro) -->
+
 <div class="modal" tabindex="-1" [class.show]="modalConfirmacionAbierto"
-    [style.display]="modalConfirmacionAbierto ? 'block' : 'none'" style="background-color: rgba(0, 0, 0, 0.5);">
+    [style.display]="modalConfirmacionAbierto ? 'block' : 'none'">
     <div class="modal-dialog">
         <div class="modal-content bg-dark text-white">
             <div class="modal-header border-secondary">

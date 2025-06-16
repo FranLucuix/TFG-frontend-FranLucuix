@@ -10,9 +10,11 @@ import { ImagenService } from '../../../services/imagen.service';
   selector: 'app-producto',
   imports: [CommonModule, FormsModule],
   templateUrl: './producto.component.html',
+  styleUrls: ['./producto.component.scss']
 })
+
 export class ProductoComponent implements OnInit {
-  productos: Producto[] = [];
+   productos: Producto[] = [];
   cargando = true;
   error: string | null = null;
   modalAbierto = false;
@@ -34,7 +36,7 @@ export class ProductoComponent implements OnInit {
     private productoService: ProductoService,
     private imagenService: ImagenService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.cargarProductos();
@@ -157,19 +159,16 @@ export class ProductoComponent implements OnInit {
     this.modalAbierto = true;
   }
 
-  // 🔴 NUEVO: abre el modal de confirmación
   abrirModalConfirmacion(id: number) {
     this.productoAEliminar = id;
     this.modalConfirmacionAbierto = true;
   }
 
-  // 🔴 NUEVO: cierra el modal sin borrar
   cerrarModalConfirmacion() {
     this.modalConfirmacionAbierto = false;
     this.productoAEliminar = null;
   }
 
-  // 🔴 NUEVO: borra el producto si hay uno seleccionado
   confirmarBorrado() {
     if (this.productoAEliminar !== null) {
       this.borrarProducto(this.productoAEliminar);
@@ -201,4 +200,50 @@ export class ProductoComponent implements OnInit {
       imagenUrl: ''
     };
   }
+
+  eliminarImagen() {
+  this.nuevoProducto.imagenUrl = '';
+  this.imagenSeleccionada = null;
+}
+
+ ordenCampo: string = '';
+  ordenAscendente: boolean = true;
+
+  get productosOrdenados(): Producto[] {
+    return this.productos.slice().sort((a, b) => {
+      const campo = this.ordenCampo;
+      if (!campo) return 0;
+
+      const valorA = (a as any)[campo];
+      const valorB = (b as any)[campo];
+
+      if (typeof valorA === 'string') {
+        return this.ordenAscendente
+          ? valorA.localeCompare(valorB)
+          : valorB.localeCompare(valorA);
+      }
+
+      return this.ordenAscendente
+        ? valorA - valorB
+        : valorB - valorA;
+    });
+  }
+
+  ordenarPor(campo: string) {
+    if (this.ordenCampo === campo) {
+      this.ordenAscendente = !this.ordenAscendente;
+    } else {
+      this.ordenCampo = campo;
+      this.ordenAscendente = true;
+    }
+  }
+
+  iconoOrden(campo: string): string {
+    if (this.ordenCampo !== campo) return 'bi bi-arrow-down-up';
+    return this.ordenAscendente ? 'bi bi-arrow-up' : 'bi bi-arrow-down';
+  }
+
+
+
+
 }

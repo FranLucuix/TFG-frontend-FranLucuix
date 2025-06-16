@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 export interface Pago {
   idPago: number;
   tipo: string;
+   activo?: boolean;
 }
 
 @Injectable({

@@ -5,17 +5,13 @@
       *ngFor="let categoria of categorias"
     >
       <div 
-        class="card h-100 bg-dark text-white border-0 shadow-sm"
+        class="card categoria-card h-100 bg-dark text-white border-0 shadow-sm"
         (click)="verCategoria(categoria.nombre)"
-        style="transition: transform 0.3s ease; cursor: pointer;"
-        onmouseover="this.style.transform='scale(1.10)'" 
-        onmouseout="this.style.transform='scale(1)'"
       >
         <img 
           [src]="categoria.imagen" 
           [alt]="categoria.nombre" 
-          class="card-img-top img-fluid rounded-top" 
-          style="height: 160px; object-fit: cover;"
+          class="card-img-top img-fluid rounded-top categoria-img"
         />
         <div class="card-body p-2">
           <p class="card-text fw-semibold small m-0">{{ categoria.nombre }}</p>

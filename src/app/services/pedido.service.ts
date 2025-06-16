@@ -10,7 +10,7 @@ export interface Pedido {
   total: number;
   estado: string;
   direccion: string;
-  fechaEntrega?: string;
+  fechaEntrega: string;
 }
 
 @Injectable({
@@ -40,4 +40,6 @@ export class PedidoService {
   borrarPedido(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
+
+  
 }

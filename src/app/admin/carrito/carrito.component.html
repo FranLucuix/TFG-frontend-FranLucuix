@@ -1,0 +1,35 @@
+<div class="container my-4">
+  <h2 class="text-white mb-4">Lista de Carritos</h2>
+
+  <div *ngIf="cargando" class="text-center text-light">Cargando carritos...</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <table class="table table-dark table-hover table-bordered align-middle" *ngIf="carritos.length > 0">
+    <thead>
+      <tr>
+        <th>ID Carrito</th>
+        <th>ID Usuario</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let carrito of carritos">
+        <td>{{ carrito.idCarrito }}</td>
+        <td>{{ carrito.idUsuario }}</td>
+        <td>{{ totales[carrito.idCarrito] | euro }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!cargando && carritos.length === 0" class="alert alert-info text-center">
+    No hay carritos disponibles.
+  </div>
+</div>
+
+<div 
+  *ngIf="modalConfirmacionAbierto"
+  class="modal d-block fade show custom-modal" 
+  tabindex="-1"
+>
+  
+</div>

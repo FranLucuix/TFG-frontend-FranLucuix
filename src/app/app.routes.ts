@@ -29,5 +29,19 @@ export const routes: Routes = [
   {
     path: 'registro',
     loadComponent: () => import('./auth/registro/registro.component').then(m => m.RegistroComponent)
-  }
+  },
+  {
+  path: 'pedido',
+  loadComponent: () =>
+    import('../app/pedido/pedido.component').then(m => m.PedidoComponent),
+  canActivate: [AuthGuard]
+},
+{
+  path: 'cuenta',
+  loadComponent: () => import('./cuenta/cuenta.component').then(m => m.CuentaComponent),
+  canActivate: [AuthGuard]
+}
+
+
+
 ];

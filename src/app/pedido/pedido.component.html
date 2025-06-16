@@ -1,0 +1,144 @@
+<div class="container my-5">
+  <h2 class="mb-4">Resumen del Pedido</h2>
+
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <form *ngIf="items.length > 0" (ngSubmit)="confirmarPedido()">
+    <div class="mb-3">
+      <label class="form-label">Método de Envío</label>
+      <select class="form-select" [(ngModel)]="metodoEnvio" name="metodoEnvio">
+        <option value="envio">Envío a domicilio</option>
+        <option value="recogida">Recogida en tienda</option>
+      </select>
+    </div>
+
+    <div *ngIf="metodoEnvio === 'envio'" class="mb-3">
+      <label class="form-label">Dirección</label>
+      <input type="text" class="form-control" [(ngModel)]="direccion" name="direccion" />
+    </div>
+
+    <div *ngIf="metodoEnvio === 'recogida'" class="mb-3">
+      <label class="form-label">Selecciona la tienda</label>
+      <select class="form-select" [(ngModel)]="direccion" name="tiendaSeleccionada">
+        <option value="" disabled selected style="color: black;">Seleccione una tienda</option>
+        <option *ngFor="let tienda of tiendas" [value]="tienda.direccion">
+          {{ tienda.nombre }} - {{ tienda.direccion }}
+        </option>
+      </select>
+
+    </div>
+
+
+    <div class="mb-3">
+      <label class="form-label">Método de Pago</label>
+      <select class="form-select" [(ngModel)]="metodoPago" name="metodoPago" (change)="onMetodoPagoChange()">
+        <option *ngFor="let metodo of metodosPago" [value]="metodo.idPago">{{ metodo.tipo }}</option>
+      </select>
+    </div>
+
+    <div *ngIf="metodoPago === 1" class="mb-3">
+      <button type="button" class="btn btn-outline-primary w-100" (click)="abrirModalTarjeta()">Añadir datos de
+        tarjeta</button>
+    </div>
+
+    <h5>Productos</h5>
+    <ul class="list-group mb-3">
+      <li *ngFor="let item of items" class="list-group-item d-flex justify-content-between">
+        <div>{{ item.producto.nombre }} x{{ item.cantidad }}</div>
+        <div>{{ ((item.producto.precioRebajado && item.producto.precioRebajado > 0) ? item.producto.precioRebajado :
+          item.producto.precio) * item.cantidad | euro }}</div>
+      </li>
+      <li class="list-group-item d-flex justify-content-between fw-bold">
+        <span>Total</span>
+        <span>{{ total | euro }}</span>
+      </li>
+    </ul>
+
+    <button class="btn btn-success w-100" type="submit" [disabled]="metodoPago === 1 && !tarjetaValida">Confirmar
+      Pedido</button>
+  </form>
+
+  <div *ngIf="items.length === 0 && !error" class="alert alert-info">Tu carrito está vacío.</div>
+
+
+  <div class="modal fade" tabindex="-1" [ngClass]="{ 'show d-block': mostrarModalTarjeta }" *ngIf="mostrarModalTarjeta"
+    style="background: rgba(0,0,0,0.7);">
+    <div class="modal-dialog">
+      <div class="modal-content dark-modal">
+        <form (ngSubmit)="validarTarjeta()" #tarjetaForm="ngForm" novalidate>
+          <div class="modal-header">
+            <h5 class="modal-title text-white">Información de Tarjeta de Crédito</h5>
+            <button type="button" class="btn-close btn-close-white" (click)="cerrarModal()"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label text-white">Nombre en la tarjeta</label>
+              <input type="text" class="form-control dark-input" [(ngModel)]="tarjeta.nombre" name="nombreTarjeta"
+                required #nombreTarjeta="ngModel" />
+              <div *ngIf="nombreTarjeta.invalid && nombreTarjeta.touched" class="text-danger small">
+                El nombre es obligatorio.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label text-white">Número de tarjeta</label>
+              <input type="text" class="form-control dark-input" maxlength="16" placeholder="XXXXXXXXXXXXXXXX"
+                [(ngModel)]="tarjeta.numero" name="numeroTarjeta" required pattern="^[0-9]{16}$"
+                #numeroTarjeta="ngModel" (input)="onNumeroTarjetaInput()" />
+              <div *ngIf="numeroTarjeta.invalid && numeroTarjeta.touched" class="text-danger small">
+                Número inválido. Debe tener 16 dígitos sin espacios.
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-6 mb-3">
+                <label class="form-label text-white">Mes Expiración</label>
+                <input type="text" class="form-control dark-input" maxlength="2" placeholder="MM"
+                  [(ngModel)]="tarjeta.mesExp" name="mesExpiracion" required pattern="^(0[1-9]|1[0-2])$"
+                  #mesExpiracion="ngModel" (input)="onMesExpInput()" />
+                <div *ngIf="mesExpiracion.invalid && mesExpiracion.touched" class="text-danger small">
+                  Mes inválido. Debe ser entre 01 y 12.
+                </div>
+              </div>
+
+              <div class="col-6 mb-3">
+                <label class="form-label text-white">Año Expiración</label>
+                <input type="text" class="form-control dark-input" maxlength="2" minlength="2" placeholder="AA"
+                  [(ngModel)]="tarjeta.anioExp" name="anioExpiracion" required #anioExpiracion="ngModel"
+                  (input)="onAnioExpInput()" />
+                <div *ngIf="anioExpiracion.invalid && anioExpiracion.touched" class="text-danger small">
+                  Año inválido. Debe ser un número de dos dígitos.
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label text-white">CVV</label>
+              <input type="password" class="form-control dark-input" maxlength="3" minlength="3" placeholder="***"
+                [(ngModel)]="tarjeta.cvv" name="cvv" required #cvv="ngModel" (input)="onCvvInput()" />
+              <div *ngIf="cvv.invalid && cvv.touched" class="text-danger small">
+                CVV inválido. Debe ser un número de 3 dígitos.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-logos-container px-3 pb-2 d-flex justify-content-end gap-3">
+            <img src="assets/img/tiendas/visa.png" alt="Visa" class="card-logo img-fluid" style="max-height: 50px;" />
+            <img src="assets/img/tiendas/mastercard.png" alt="Mastercard" class="card-logo img-fluid"
+              style="max-height: 50px;" />
+          </div>
+
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal-backdrop fade show" *ngIf="mostrarModalTarjeta"></div>
+
+</div>

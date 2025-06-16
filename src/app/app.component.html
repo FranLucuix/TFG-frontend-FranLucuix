@@ -1,15 +1,17 @@
 <div class="d-flex flex-column min-vh-100">
 
-  <header>
+  <header class="position-fixed top-0 start-0 w-100 bg-white shadow" style="z-index: 1030;">
     <app-header></app-header>
   </header>
 
-  <main class="flex-grow-1 d-flex flex-column">
+  <main class="flex-grow-1 d-flex flex-column mt-5 pt-3 px-0">
     <router-outlet></router-outlet>
   </main>
+
+
 
   <footer>
     <app-footer></app-footer>
   </footer>
-  
+
 </div>

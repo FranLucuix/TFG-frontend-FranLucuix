@@ -1,38 +1,68 @@
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="card p-4 shadow-sm" style="max-width: 400px; width: 100%;">
-      <h2 class="mb-4 text-center">Registro</h2>
-  
-      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-        <div class="mb-3">
-          <label for="nombre" class="form-label">Nombre</label>
-          <input id="nombre" type="text" formControlName="nombre" class="form-control" [ngClass]="{'is-invalid': form.get('nombre')?.invalid && form.get('nombre')?.touched}" />
-          <div *ngIf="form.get('nombre')?.invalid && form.get('nombre')?.touched" class="invalid-feedback">
-            Nombre es obligatorio y debe tener máximo 100 caracteres.
-          </div>
-        </div>
-  
-        <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
-          <input id="email" type="email" formControlName="email" class="form-control" [ngClass]="{'is-invalid': form.get('email')?.invalid && form.get('email')?.touched}" />
-          <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="invalid-feedback">
-            Introduce un email válido.
-          </div>
-        </div>
-  
-        <div class="mb-3">
-          <label for="password" class="form-label">Contraseña</label>
-          <input id="password" type="password" formControlName="password" class="form-control" [ngClass]="{'is-invalid': form.get('password')?.invalid && form.get('password')?.touched}" />
-          <div *ngIf="form.get('password')?.invalid && form.get('password')?.touched" class="invalid-feedback">
-            Mínimo 6 caracteres.
-          </div>
-        </div>
-  
-        <div *ngIf="error" class="alert alert-danger" role="alert">
-          {{ error }}
-        </div>
-  
-        <button type="submit" class="btn btn-success w-100" [disabled]="form.invalid">Registrarse</button>
-      </form>
+  <div class="card p-4 shadow-lg" style="max-width: 450px; width: 100%; border-radius: 0.75rem; background-color: #2c3034; border-color: #495057;">
+    <div class="text-center mb-4">
+      <h2 class="fw-bold text-info mb-2">Crear Cuenta</h2>
+      <p class="text-secondary mb-0">Completa tus datos para registrarte</p>
     </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+      <div class="mb-3">
+        <label for="nombre" class="form-label fw-semibold text-light">Nombre</label>
+        <div class="input-group">
+          <span class="input-group-text bg-dark text-light border-secondary"><i class="bi bi-person-fill"></i></span>
+          <input id="nombre" formControlName="nombre" type="text" class="form-control bg-dark text-light border-secondary"
+                 [ngClass]="{'is-invalid': form.get('nombre')?.invalid && form.get('nombre')?.touched}"
+                 placeholder="Tu nombre completo">
+        </div>
+        <div *ngIf="form.get('nombre')?.invalid && form.get('nombre')?.touched" class="invalid-feedback d-block">
+          Nombre es obligatorio y debe tener máximo 100 caracteres.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label fw-semibold text-light">Email</label>
+        <div class="input-group">
+          <span class="input-group-text bg-dark text-light border-secondary"><i class="bi bi-envelope-fill"></i></span>
+          <input id="email" formControlName="email" type="email" class="form-control bg-dark text-light border-secondary"
+                 [ngClass]="{'is-invalid': form.get('email')?.invalid && form.get('email')?.touched}"
+                 placeholder="ejemplo@email.com">
+        </div>
+        <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="invalid-feedback d-block">
+          Introduce un email válido.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label fw-semibold text-light">Contraseña</label>
+        <div class="input-group">
+          <span class="input-group-text bg-dark text-light border-secondary"><i class="bi bi-lock-fill"></i></span>
+          <input id="password" formControlName="password" type="password" class="form-control bg-dark text-light border-secondary"
+                 [ngClass]="{'is-invalid': form.get('password')?.invalid && form.get('password')?.touched}"
+                 placeholder="••••••••">
+        </div>
+        <div *ngIf="form.get('password')?.invalid && form.get('password')?.touched" class="invalid-feedback d-block">
+          Mínimo 6 caracteres.
+        </div>
+      </div>
+
+      <div *ngIf="error" class="alert alert-danger d-flex align-items-center gap-2 mb-3">
+        <i class="bi bi-exclamation-circle"></i>
+        <div>{{ error }}</div>
+      </div>
+
+      <button type="submit" class="btn btn-info w-100 py-2 mb-3 fw-bold text-dark" [disabled]="form.invalid">
+        <i class="bi bi-person-plus me-2"></i>Registrarse
+      </button>
+    </form>
+
+    <div class="d-flex align-items-center my-3">
+      <hr class="flex-grow-1 border-secondary">
+      <span class="px-3 text-secondary small">¿Ya tienes cuenta?</span>
+      <hr class="flex-grow-1 border-secondary">
+    </div>
+
+    <a class="btn btn-outline-info w-100 py-2 fw-bold" routerLink="/login">
+      <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar sesión
+    </a>
   </div>
-  
+</div>

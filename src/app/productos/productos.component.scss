@@ -1,0 +1,36 @@
+@keyframes slideDown {
+    from {
+      transform: translate(-50%, -100%);
+      opacity: 0;
+    }
+    to {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+  }
+
+  .mensaje-flotante {
+    animation: slideDown 0.3s ease-out;
+  }
+
+  .mensaje-flotante.fade-out {
+    animation: slideUp 0.3s ease-in;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+    to {
+      transform: translate(-50%, -100%);
+      opacity: 0;
+    }
+  }
+
+  .imagen-producto-modal {
+  width: 200px;    
+  height: 200px;
+  object-fit: cover; 
+  object-position: center;
+}

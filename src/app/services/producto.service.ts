@@ -40,4 +40,11 @@ export class ProductoService {
   borrarProducto(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
+
+  getProductosDestacados(): Observable<Producto[]> {
+  return this.http.get<Producto[]>(`${this.apiUrl}/destacados`, { withCredentials: true, responseType: 'json' });
+}
+
+
+
 }

@@ -1,0 +1,122 @@
+<div class="container-fluid py-5 cuenta-container">
+  <div class="row justify-content-center">
+    <div class="col-12 col-xl-10">
+   
+      <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-light mb-2">Mi Cuenta</h1>
+        <p class="text-muted">Gestiona tu información y pedidos</p>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="card h-100 shadow-lg border-0 bg-gradient-dark">
+            <div class="card-header bg-transparent border-bottom border-secondary">
+              <h5 class="card-title mb-0 text-light d-flex align-items-center">
+                <i class="bi bi-person-circle me-2"></i>
+                Información Personal
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="user-info">
+                <div class="info-item mb-3">
+                  <label class="text-muted small mb-1">Nombre completo</label>
+                  <div class="text-light fw-medium">{{ usuario?.nombre || 'No disponible' }}</div>
+                </div>
+                <div class="info-item">
+                  <label class="text-muted small mb-1">Correo electrónico</label>
+                  <div class="text-light fw-medium">{{ usuario?.email || 'No disponible' }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-8">
+          <div class="card shadow-lg border-0 bg-gradient-dark">
+            <div class="card-header bg-transparent border-bottom border-secondary">
+              <h5 class="card-title mb-0 text-light d-flex align-items-center">
+                <i class="bi bi-bag-check me-2"></i>
+                Historial de Pedidos
+                <span class="badge bg-primary ms-2">{{ pedidos.length }}</span>
+              </h5>
+            </div>
+            <div class="card-body">
+              <div *ngIf="pedidos.length > 0; else sinPedidos" class="pedidos-container">
+                <div class="row g-3">
+                  <div class="col-12" *ngFor="let pedido of pedidos; let i = index">
+                    <div class="pedido-card p-3 rounded border border-secondary">
+                      <div class="row align-items-center">
+                        <div class="col-md-3">
+                          <div class="pedido-numero">
+                            <span class="badge bg-outline-primary fs-6">Pedido #{{ i + 1 }}</span>
+                            <div class="text-muted small mt-1">{{ pedido.fechaPedido | date:'dd/MM/yyyy' }}</div>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="pedido-estado">
+                            <span class="badge" [ngClass]="getEstadoClass(pedido.estado)">
+                              {{ pedido.estado }}
+                            </span>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="pedido-total">
+                            <div class="text-light fw-bold">{{ pedido.total | euro }}</div>
+                            <div class="text-muted small">Total</div>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <button class="btn btn-outline-primary btn-sm w-100" 
+                                  type="button"
+                                  data-bs-toggle="collapse" 
+                                  [attr.data-bs-target]="'#pedido-' + i"
+                                  aria-expanded="false">
+                            <i class="bi bi-eye me-1"></i>
+                            Ver detalles
+                          </button>
+                        </div>
+                      </div>
+                      
+                      <div class="collapse mt-3" [id]="'pedido-' + i">
+                        <div class="pedido-detalles pt-3 border-top border-secondary">
+                          <div class="row g-3">
+                            <div class="col-md-6">
+                              <div class="detalle-item">
+                                <label class="text-muted small">Dirección de entrega</label>
+                                <div class="text-light">{{ pedido.direccion }}</div>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="detalle-item">
+                                <label class="text-muted small">Fecha de entrega</label>
+                                <div class="text-light">
+                                  {{ pedido.fechaEntrega ? (pedido.fechaEntrega | date:'dd/MM/yyyy') : 'Pendiente' }}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <ng-template #sinPedidos>
+                <div class="text-center py-5">
+                  <i class="bi bi-bag-x display-1 text-muted mb-3"></i>
+                  <h5 class="text-light mb-2">No tienes pedidos aún</h5>
+                  <p class="text-muted mb-4">Cuando realices tu primer pedido, aparecerá aquí</p>
+                  <a routerLink="/carrito" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-2"></i>
+                    Hacer mi primer pedido
+                  </a>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

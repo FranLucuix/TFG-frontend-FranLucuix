@@ -1,6 +1,5 @@
 <div class="d-flex flex-grow-1 w-100">
 
-  <!-- Sidebar -->
   <nav class="col-md-2 d-none d-md-block bg-dark text-white d-flex flex-column py-3">
     <h5 class="text-center border-bottom border-white pb-2">Admin</h5>
     <ul class="nav flex-column">
@@ -17,16 +16,12 @@
         <a routerLink="/admin/pagos" class="nav-link text-white">Gestión de Pagos</a>
       </li>
       <li class="nav-item">
-        <a routerLink="/admin/carrito" class="nav-link text-white">Gestión de Carrito</a>
-      </li>
-      <li class="nav-item">
-        <a routerLink="/admin/carrito-producto" class="nav-link text-white">Gestión de Carrito-Producto</a>
+        <a routerLink="/admin/carritos" class="nav-link text-white">Gestión de Carrito</a>
       </li>
     </ul>
   </nav>
 
 
-  <!-- Main content -->
   <main class="col px-4 py-4 overflow-auto">
     <router-outlet></router-outlet>
   </main>

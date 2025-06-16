@@ -1,6 +1,23 @@
 <div class="container py-5 text-white">
   <h2 class="text-center mb-4">Productos: {{ categoriaSeleccionada }}</h2>
 
+  <div *ngIf="mostrarMensaje"
+    class="mensaje-flotante position-fixed top-0 start-50 translate-middle-x mt-4 px-4 py-3 rounded-3 shadow-lg d-flex align-items-center gap-2"
+    [ngClass]="{
+         'bg-success': tipoMensaje === 'success',
+         'bg-danger': tipoMensaje === 'error', 
+         'bg-warning': tipoMensaje === 'warning'
+       }" style="z-index: 9999; min-width: 300px; animation: slideDown 0.3s ease-out;">
+    <i class="fas" [ngClass]="{
+         'fa-check-circle': tipoMensaje === 'success',
+         'fa-exclamation-circle': tipoMensaje === 'error',
+         'fa-exclamation-triangle': tipoMensaje === 'warning'
+       }"></i>
+    <span class="text-white fw-medium">{{ mensajeFlotante }}</span>
+    <button type="button" class="btn-close btn-close-white ms-auto" (click)="ocultarMensajeFlotante()"
+      aria-label="Cerrar"></button>
+  </div>
+
   <div *ngIf="cargando" class="text-center">
     <p>Cargando productos...</p>
   </div>
@@ -9,7 +26,6 @@
     <p>{{ error }}</p>
   </div>
 
-  <!-- Contenedor flex para los botones, con espacio entre ellos -->
   <div class="mb-4 d-flex justify-content-center gap-3">
     <button class="btn btn-outline-light" (click)="volverAlCatalogo()">
       Ir al catálogo
@@ -17,14 +33,14 @@
     <button class="btn btn-outline-light" (click)="volverAlCarrito()">
       🛒 Ir al carrito
     </button>
-
   </div>
 
   <div class="row g-4 justify-content-center" *ngIf="!cargando && productosFiltrados.length">
     <div class="col-12 col-sm-6 col-md-4" *ngFor="let producto of productosFiltrados">
       <div class="card h-100 bg-dark text-white border-0 shadow-sm position-relative"
-        style="transition: transform 0.3s ease; cursor: pointer;" (click)="productoSeleccionado = producto"
-        data-bs-toggle="modal" data-bs-target="#productoModal" onmouseover="this.style.transform='scale(1.1)'"
+        style="transition: transform 0.3s ease; cursor: pointer;"
+        (click)="productoSeleccionado = producto; resetearMensajeError()" data-bs-toggle="modal"
+        data-bs-target="#productoModal" onmouseover="this.style.transform='scale(1.1)'"
         onmouseout="this.style.transform='scale(1)'">
         <img [src]="baseUrl + producto.imagenUrl" [alt]="producto.nombre" class="card-img-top img-fluid"
           style="height: 200px; object-fit: cover;" />
@@ -41,7 +57,6 @@
               <div class="text-end">
                 <span class="text-success fw-bold fs-5">{{ producto.precioRebajado | euro }}</span>
               </div>
-
             </ng-container>
             <ng-template #sinRebaja>
               <div class="text-end">
@@ -63,18 +78,26 @@
       <div class="modal-content bg-dark text-white">
         <div class="modal-header border-0">
           <h5 class="modal-title" id="productoModalLabel">{{ productoSeleccionado?.nombre }}</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"
+            (click)="resetearMensajeError()"></button>
+        </div>
+        <div *ngIf="productoSeleccionado?.imagenUrl" class="d-flex justify-content-center align-items-center my-3">
+          <img [src]="'http://localhost:8080' + productoSeleccionado?.imagenUrl"
+            [alt]="productoSeleccionado?.nombre || 'Producto'" class="imagen-producto-modal img-fluid rounded shadow" />
         </div>
         <div class="modal-body">
           <p>Seleccione la cantidad:</p>
           <input type="number" class="form-control" [(ngModel)]="cantidadSeleccionada" min="1"
             [max]="productoSeleccionado?.stock || 1" />
-        </div>
-        <div *ngIf="mensajeErrorStock" class="text-danger mt-2">
-          {{ mensajeErrorStock }}
+
+          <div *ngIf="mensajeErrorStock" class="alert alert-danger mt-3 mb-0">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            {{ mensajeErrorStock }}
+          </div>
         </div>
         <div class="modal-footer border-0">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+            (click)="resetearMensajeError()">Cancelar</button>
           <button type="button" class="btn btn-primary" (click)="confirmarCantidad()">Confirmar</button>
         </div>
       </div>

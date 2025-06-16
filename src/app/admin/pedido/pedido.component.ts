@@ -55,10 +55,24 @@ export class PedidoComponent implements OnInit {
   }
 
   guardarPedido() {
+    if (this.nuevoPedido.fechaEntrega && this.nuevoPedido.fechaEntrega.trim() !== '') {
+      this.nuevoPedido.estado = 'confirmado';
+    }
+
     if (this.editando) {
       this.actualizarPedido();
     } else {
       this.crearPedido();
+    }
+  }
+
+  onFechaEntregaChange() {
+    if (this.nuevoPedido.fechaEntrega && this.nuevoPedido.fechaEntrega.trim() !== '') {
+      this.nuevoPedido.estado = 'confirmado';
+    } else if (this.nuevoPedido.fechaEntrega === '') {
+      if (this.nuevoPedido.estado === 'confirmado') {
+        this.nuevoPedido.estado = 'pendiente';
+      }
     }
   }
 
@@ -133,7 +147,7 @@ export class PedidoComponent implements OnInit {
       idPago: 0,
       fechaPedido: '',
       total: 0,
-      estado: '',
+      estado: 'pendiente', 
       direccion: '',
       fechaEntrega: '',
     };

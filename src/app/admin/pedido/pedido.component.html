@@ -1,11 +1,9 @@
-<!-- Botón para abrir el modal -->
 <div class="d-flex justify-content-end mb-3">
   <button class="btn btn-success" (click)="abrirModal()">
     <i class="bi bi-plus-circle me-1"></i> Nuevo Pedido
   </button>
 </div>
 
-<!-- Modal -->
 <div class="modal" tabindex="-1" [class.show]="modalAbierto" [style.display]="modalAbierto ? 'block' : 'none'">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -63,7 +61,6 @@
   </div>
 </div>
 
-<!-- Tabla -->
 <table class="table table-dark table-hover table-bordered align-middle mt-4">
   <thead>
     <tr>
@@ -100,7 +97,6 @@
   </tbody>
 </table>
 
-<!-- Modal de Confirmación de Eliminación (oscuro) -->
 <div class="modal" tabindex="-1" [class.show]="modalConfirmacionAbierto"
   [style.display]="modalConfirmacionAbierto ? 'block' : 'none'" style="background-color: rgba(0, 0, 0, 0.5);">
   <div class="modal-dialog">

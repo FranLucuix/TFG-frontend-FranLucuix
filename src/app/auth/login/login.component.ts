@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.component.html'
 })
 export class LoginComponent {
@@ -20,7 +20,6 @@ export class LoginComponent {
     private router: Router
   ) {
     this.form = this.createForm(); 
-    console.log('LoginComponent creado');
   }
 
   createForm() {

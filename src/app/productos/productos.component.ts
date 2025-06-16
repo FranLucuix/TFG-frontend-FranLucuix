@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProductoService, Producto } from '../services/producto.service';
 import { CarritoProductoService, CarritoProducto } from '../services/carrito-producto.service';
+import { CarritoService, Carrito } from '../services/carrito.service';
+import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule, NgModel } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { NgIf, NgFor } from '@angular/common';
 import { EuroPipe } from '../shared/pipes/euro.pipe';
 
@@ -35,21 +37,48 @@ export class ProductosComponent implements OnInit {
   cantidadSeleccionada: number = 1;
   mensajeErrorStock: string | null = null;
 
-  private idCarrito: number = 1;
+  mensajeFlotante: string | null = null;
+  tipoMensaje: 'success' | 'error' | 'warning' = 'success';
+  mostrarMensaje: boolean = false;
+
+  private idCarrito: number = 0;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private productoService: ProductoService,
-    private carritoService: CarritoProductoService
+    private carritoProductoService: CarritoProductoService,
+    private carritoService: CarritoService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
+    this.obtenerIdCarritoUsuario();
+
     this.route.paramMap.subscribe(params => {
       const categoria = params.get('categoria');
       if (categoria) {
         this.categoriaSeleccionada = categoria;
         this.cargarProductos(categoria);
+      }
+    });
+  }
+
+  obtenerIdCarritoUsuario(): void {
+    const usuarioJson = localStorage.getItem('usuario');
+    if (!usuarioJson) {
+      return;
+    }
+    const usuario = JSON.parse(usuarioJson);
+    const idUsuario = usuario.idUsuario;
+
+    this.carritoService.getCarritoPorUsuario(idUsuario).subscribe({
+      next: (carrito: Carrito) => {
+        this.idCarrito = carrito.idCarrito;
+      },
+      error: (err) => {
+        console.error('Error al obtener carrito del usuario', err);
+        this.mostrarMensajeFlotante('No se pudo obtener el carrito del usuario', 'error');
       }
     });
   }
@@ -79,55 +108,87 @@ export class ProductosComponent implements OnInit {
     this.router.navigate(['/catalog']);
   }
 
- confirmarCantidad(): void {
-  if (!this.productoSeleccionado) return;
-
-  if (this.cantidadSeleccionada > (this.productoSeleccionado.stock || 0)) {
-    this.mensajeErrorStock = 'No hay suficiente stock disponible.';
-    return;
+  resetearMensajeError(): void {
+    this.mensajeErrorStock = null;
   }
 
-  this.mensajeErrorStock = null;
+  mostrarMensajeFlotante(mensaje: string, tipo: 'success' | 'error' | 'warning'): void {
+    this.mensajeFlotante = mensaje;
+    this.tipoMensaje = tipo;
+    this.mostrarMensaje = true;
 
-  const item: CarritoProducto = {
-    idCarrito: this.idCarrito,
-    idProducto: this.productoSeleccionado.idProducto,
-    cantidad: this.cantidadSeleccionada
-  };
+    setTimeout(() => {
+      this.ocultarMensajeFlotante();
+    }, 4000);
+  }
 
-  this.carritoService.agregarCarritoProducto(item).subscribe({
-    next: () => {
-      // Actualiza el stock local
-      this.productoSeleccionado!.stock -= this.cantidadSeleccionada;
+  ocultarMensajeFlotante(): void {
+    this.mostrarMensaje = false;
+    setTimeout(() => {
+      this.mensajeFlotante = null;
+    }, 300); 
+  }
 
-      // Si ya no queda stock, lo quitamos del catálogo
-      if (this.productoSeleccionado!.stock <= 0) {
-        this.productosFiltrados = this.productosFiltrados.filter(
-          p => p.idProducto !== this.productoSeleccionado!.idProducto
-        );
-      }
-
-      // Restablece cantidad
-      this.cantidadSeleccionada = 1;
-
-      // Cierra modal
+  confirmarCantidad(): void {
+    if (!this.authService.isLoggedIn()) {
+      
       const modal = document.getElementById('productoModal');
       if (modal) {
         const bootstrapModal = bootstrap.Modal.getInstance(modal) || new bootstrap.Modal(modal);
         bootstrapModal.hide();
       }
-
-      alert('Producto añadido al carrito correctamente.');
-    },
-    error: (err: any) => {
-      console.error('Error al añadir al carrito', err);
-      if (err.error && typeof err.error === 'string') {
-        alert(err.error);
-      } else {
-        alert('Error al añadir producto al carrito.');
-      }
+        this.router.navigate(['/login']);
+      return;
     }
-  });
-}
 
+    if (!this.productoSeleccionado) return;
+
+    if (this.cantidadSeleccionada > (this.productoSeleccionado.stock || 0)) {
+      this.mensajeErrorStock = 'No hay suficiente stock disponible.';
+      return;
+    }
+
+    if (this.idCarrito === 0) {
+      this.mostrarMensajeFlotante('No se ha encontrado el carrito del usuario.', 'error');
+      return;
+    }
+
+    this.mensajeErrorStock = null;
+
+    const item: CarritoProducto = {
+      idCarrito: this.idCarrito,
+      idProducto: this.productoSeleccionado.idProducto,
+      cantidad: this.cantidadSeleccionada
+    };
+
+    this.carritoProductoService.agregarCarritoProducto(item).subscribe({
+      next: () => {
+        this.productoSeleccionado!.stock -= this.cantidadSeleccionada;
+
+        if (this.productoSeleccionado!.stock <= 0) {
+          this.productosFiltrados = this.productosFiltrados.filter(
+            p => p.idProducto !== this.productoSeleccionado!.idProducto
+          );
+        }
+
+        this.cantidadSeleccionada = 1;
+
+        const modal = document.getElementById('productoModal');
+        if (modal) {
+          const bootstrapModal = bootstrap.Modal.getInstance(modal) || new bootstrap.Modal(modal);
+          bootstrapModal.hide();
+        }
+
+        this.mostrarMensajeFlotante('Producto añadido al carrito correctamente.', 'success');
+      },
+      error: (err: any) => {
+        console.error('Error al añadir al carrito', err);
+        if (err.error && typeof err.error === 'string') {
+          this.mostrarMensajeFlotante(err.error, 'error');
+        } else {
+          this.mostrarMensajeFlotante('Error al añadir producto al carrito.', 'error');
+        }
+      }
+    });
+  }
 }

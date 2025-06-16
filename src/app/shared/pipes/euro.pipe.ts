@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class EuroPipe implements PipeTransform {
   transform(value: number, decimales: number = 2): string {
-    if (value == null || isNaN(value)) return '0,00 €';
+    if (value == null || isNaN(value)) return '0.00 €';
 
     const opciones = {
       minimumFractionDigits: decimales,

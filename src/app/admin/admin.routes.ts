@@ -33,14 +33,9 @@ export const ADMIN_ROUTES: Routes = [
           import('./pago/pago.component').then(m => m.PagoComponent),
       },
       {
-        path: 'carrito',
+        path: 'carritos',
         loadComponent: () =>
-          import('../carrito/carrito.component').then(m => m.CarritoComponent),
-      },
-      {
-        path: 'carrito-producto',
-        loadComponent: () =>
-          import('./carrito-producto/carrito-producto.component').then(m => m.CarritoProductoComponent),
+          import('../admin/carrito/carrito.component').then(m => m.CarritoComponent),
       }
     ]
   }
