@@ -44,6 +44,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/FranLucuixApp/",
               "budgets": [
                 {
                   "type": "initial",
